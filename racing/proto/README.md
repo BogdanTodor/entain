@@ -14,7 +14,7 @@
 ```ListRaces(ListRacesRequest) ListRacesResponse```
 
 #### Requests
-* **ListRacesRequest**: Request which takes ListRacesRequestFilter as a parameter 
+* **ListRacesRequest**: Request which takes ```ListRacesRequestFilter``` and ```order_by``` as inputs 
 
 #### Responses
 * **ListRacesResponse**: The response containing all races that match the filtering criteria

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"sort"
+
 	"git.neds.sh/matty/entain/racing/db"
 	"git.neds.sh/matty/entain/racing/proto/racing"
 	"golang.org/x/net/context"
@@ -27,5 +29,35 @@ func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesReque
 		return nil, err
 	}
 
+	races, err = OrderRaces(races, in.OrderBy)
+	if err != nil {
+		return nil, err
+	}
+
 	return &racing.ListRacesResponse{Races: races}, nil
+}
+
+func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) {
+
+	// Sorts the races array using sort.Slice based on the orderedBy user input
+	// where in the case of no input or invalid inputs, advertised_start_time is
+	// the default case
+
+	sort.Slice(races, func(i, j int) bool {
+		switch orderedBy {
+		case "advertised_start_time":
+			return races[i].GetAdvertisedStartTime().GetSeconds() < races[j].GetAdvertisedStartTime().GetSeconds()
+		case "id":
+			return races[i].GetId() < races[j].GetId()
+		case "meeting_id":
+			return races[i].GetMeetingId() < races[j].GetMeetingId()
+		case "name":
+			return races[i].GetName() < races[j].GetName()
+		case "number":
+			return races[i].GetNumber() < races[j].GetNumber()
+		default:
+			return races[i].GetAdvertisedStartTime().GetSeconds() < races[j].GetAdvertisedStartTime().GetSeconds()
+		}
+	})
+	return races, nil
 }
