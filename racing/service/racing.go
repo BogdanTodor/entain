@@ -2,6 +2,7 @@ package service
 
 import (
 	"sort"
+	"time"
 
 	"git.neds.sh/matty/entain/racing/db"
 	"git.neds.sh/matty/entain/racing/proto/racing"
@@ -25,6 +26,11 @@ func NewRacingService(racesRepo db.RacesRepo) Racing {
 
 func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error) {
 	races, err := s.racesRepo.List(in.Filter)
+	if err != nil {
+		return nil, err
+	}
+
+	races, err = AssignRaceStatus(races)
 	if err != nil {
 		return nil, err
 	}
@@ -59,5 +65,24 @@ func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) 
 			return races[i].GetAdvertisedStartTime().GetSeconds() < races[j].GetAdvertisedStartTime().GetSeconds()
 		}
 	})
+	return races, nil
+}
+
+func AssignRaceStatus(races []*racing.Race) ([]*racing.Race, error) {
+	// Get the current timestamp
+	currentTime := time.Now()
+
+	// Iterate over the races and compare the current time to the advertised start time
+	// to assign the status
+	for _, race := range races {
+		// Convert advertised start time to standard Go time
+		advertisedStart := race.GetAdvertisedStartTime().AsTime()
+
+		if advertisedStart.Before(currentTime) {
+			race.Status = "CLOSED"
+		} else {
+			race.Status = "OPEN"
+		}
+	}
 	return races, nil
 }

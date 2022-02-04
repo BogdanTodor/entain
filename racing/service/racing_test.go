@@ -11,12 +11,13 @@ import (
 
 // Creating test entities
 var (
-	// Creating timestamps for Race advertised_state_time field\
+
+	// Creating timestamps for Race advertised_state_time field
 	day_one   = timestamppb.New(time.Now().AddDate(0, 0, -4))
 	day_two   = timestamppb.New(time.Now().AddDate(0, 0, -3))
 	day_three = timestamppb.New(time.Now().AddDate(0, 0, -2))
-	day_four  = timestamppb.New(time.Now().AddDate(0, 0, -1))
-	day_five  = timestamppb.New(time.Now())
+	day_four  = timestamppb.New(time.Now().AddDate(0, 0, 1))
+	day_five  = timestamppb.New(time.Now().AddDate(0, 0, 2))
 
 	// Creating five separate races to perform tests with
 	race_two = racing.Race{
@@ -26,6 +27,7 @@ var (
 		Number:              2,
 		Visible:             true,
 		AdvertisedStartTime: day_one,
+		Status:              "",
 	}
 
 	race_four = racing.Race{
@@ -35,6 +37,7 @@ var (
 		Number:              4,
 		Visible:             false,
 		AdvertisedStartTime: day_two,
+		Status:              "",
 	}
 
 	race_six = racing.Race{
@@ -44,6 +47,7 @@ var (
 		Number:              6,
 		Visible:             true,
 		AdvertisedStartTime: day_three,
+		Status:              "",
 	}
 
 	race_eight = racing.Race{
@@ -53,6 +57,7 @@ var (
 		Number:              8,
 		Visible:             false,
 		AdvertisedStartTime: day_four,
+		Status:              "",
 	}
 
 	race_ten = racing.Race{
@@ -62,6 +67,7 @@ var (
 		Number:              10,
 		Visible:             true,
 		AdvertisedStartTime: day_five,
+		Status:              "",
 	}
 )
 
@@ -191,6 +197,49 @@ func TestOrderRaces(t *testing.T) {
 		t.Run(tt.description, func(t *testing.T) {
 			actual, err := OrderRaces(tt.input.races, tt.input.orderBy)
 			assert.Equal(t, tt.expect, actual)
+			assert.Equal(t, tt.err, err)
+		})
+	}
+}
+
+func TestAssignRaceStatus(t *testing.T) {
+	tests := []struct {
+		description string
+		input       []*racing.Race
+		expect      []string
+		err         error
+	}{
+		{
+			description: "Assigns status field correctly",
+			input: []*racing.Race{
+				&race_two,
+				&race_eight,
+				&race_six,
+				&race_four,
+				&race_ten,
+			},
+			expect: []string{
+				"CLOSED",
+				"OPEN",
+				"CLOSED",
+				"CLOSED",
+				"OPEN",
+			},
+			err: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.description, func(t *testing.T) {
+			actual, err := AssignRaceStatus(tt.input)
+			// Create slice to store the statuses of the race returned by the
+			// AssignRaceStatus function and compare to expected statuses
+			actualStatuses := []string{}
+
+			for race := range actual {
+				actualStatuses = append(actualStatuses, actual[race].Status)
+			}
+
+			assert.Equal(t, tt.expect, actualStatuses)
 			assert.Equal(t, tt.err, err)
 		})
 	}
