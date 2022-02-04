@@ -9,6 +9,7 @@
 * **Number**: The number of the race (int64)
 * **Visible**: Whether the race is visible (bool)
 * **AdvertisedStartTime**: The time the race is advertised to run (Timestamp)
+* **Status**: Uses the AdvertisedStartTime to determine if the race is open or closed (string)
 
 #### RPCs
 ```ListRaces(ListRacesRequest) ListRacesResponse```
