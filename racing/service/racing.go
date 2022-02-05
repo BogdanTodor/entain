@@ -12,6 +12,8 @@ import (
 type Racing interface {
 	// ListRaces will return a collection of races.
 	ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error)
+	// GetRaceById will return a single race based on the user provided id.
+	GetRaceById(ctx context.Context, in *racing.GetRaceRequest) (*racing.GetRaceResponse, error)
 }
 
 // racingService implements the Racing interface.
@@ -22,6 +24,21 @@ type racingService struct {
 // NewRacingService instantiates and returns a new racingService.
 func NewRacingService(racesRepo db.RacesRepo) Racing {
 	return &racingService{racesRepo}
+}
+
+// GetRaceById returns a single race retrieved using a user specified id
+func (s *racingService) GetRaceById(ctx context.Context, in *racing.GetRaceRequest) (*racing.GetRaceResponse, error) {
+	race, err := s.racesRepo.Get(in)
+	if err != nil {
+		return nil, err
+	}
+
+	race, err = AssignRaceStatusSingle(race)
+	if err != nil {
+		return nil, err
+	}
+
+	return &racing.GetRaceResponse{Race: race}, nil
 }
 
 func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error) {
@@ -43,6 +60,7 @@ func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesReque
 	return &racing.ListRacesResponse{Races: races}, nil
 }
 
+// OrderRaces sorts the array of Races by the user defined order by field
 func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) {
 
 	// Sorts the races array using sort.Slice based on the orderedBy user input
@@ -68,6 +86,8 @@ func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) 
 	return races, nil
 }
 
+// AssignRaceStatus compares the current time to the advertised start time of each race
+// and sets the status field to either OPEN or CLOSED
 func AssignRaceStatus(races []*racing.Race) ([]*racing.Race, error) {
 	// Get the current timestamp
 	currentTime := time.Now()
@@ -85,4 +105,19 @@ func AssignRaceStatus(races []*racing.Race) ([]*racing.Race, error) {
 		}
 	}
 	return races, nil
+}
+
+// AssignRaceStatusSingle is a wrapper function used to call AssignRaceStatus when
+// the result is a single element instead of an array of elements
+func AssignRaceStatusSingle(race *racing.Race) (*racing.Race, error) {
+	// make sure to test edge cases for this and justify decisions for doing it this way
+
+	raceAsArray := []*racing.Race{race}
+
+	result, err := AssignRaceStatus(raceAsArray)
+	if err != nil {
+		return nil, err
+	}
+
+	return result[0], err
 }

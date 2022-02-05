@@ -12,13 +12,18 @@
 * **Status**: Uses the AdvertisedStartTime to determine if the race is open or closed (string)
 
 #### RPCs
-```ListRaces(ListRacesRequest) ListRacesResponse```
+* `ListRaces(ListRacesRequest) ListRacesResponse`
+* `GetRaceById(GetRaceRequest) GetRaceResponse`
 
 #### Requests
-* **ListRacesRequest**: Request which takes ```ListRacesRequestFilter``` and ```order_by``` as inputs 
+* **ListRacesRequest**: Request which takes `ListRacesRequestFilter` and `order_by` as inputs 
+* **GetRaceRequest**: Request which accepts an `int64` field `id`
 
 #### Responses
 * **ListRacesResponse**: The response containing all races that match the filtering criteria
+* **GetRaceResponse**: The response containing a single Race corresponding to the id specified in `GetRaceRequest`
 
 #### Filters
-* **ListRacesRequestFilter**: Input into ListRaceRequest that filters the races
+* **ListRacesRequestFilter**: Input into ListRaceRequest that filters the races result. Can provide two optional inputs into the filter:
+    1. List of `int64` meeting ids to filter a subset of the results
+    2. A `bool` variable to filter on race visibility
