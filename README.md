@@ -87,6 +87,11 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
 }'
 ```
 
+6. Make a request for a single race by id...
+```bash
+curl "http://localhost:8000/v1/race/82"
+```
+
 ### Changes/Updates Required
 
 - We'd like to see you push this repository up to **GitHub/Gitlab/Bitbucket** and lodge a **Pull/Merge Request for each** of the below tasks.

@@ -244,3 +244,32 @@ func TestAssignRaceStatus(t *testing.T) {
 		})
 	}
 }
+
+func TestAssignRaceStatusSingle(t *testing.T) {
+	tests := []struct {
+		description string
+		input       *racing.Race
+		expect      string
+		err         error
+	}{
+		{
+			description: "Assigns status CLOSED to Race from the past",
+			input:       &race_two,
+			expect:      "CLOSED",
+			err:         nil,
+		},
+		{
+			description: "Assigns status OPEN to Race in the future",
+			input:       &race_ten,
+			expect:      "OPEN",
+			err:         nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.description, func(t *testing.T) {
+			actual, err := AssignRaceStatusSingle(tt.input)
+			assert.Equal(t, tt.expect, actual.Status)
+			assert.Equal(t, tt.err, err)
+		})
+	}
+}

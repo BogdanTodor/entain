@@ -19,6 +19,9 @@ type RacesRepo interface {
 
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
+
+	// GetRace will return a single race.
+	Get(req *racing.GetRaceRequest) (*racing.Race, error)
 }
 
 type racesRepo struct {
@@ -41,6 +44,38 @@ func (r *racesRepo) Init() error {
 	})
 
 	return err
+}
+
+func (r *racesRepo) Get(req *racing.GetRaceRequest) (*racing.Race, error) {
+	var (
+		err   error
+		query string
+		args  []interface{}
+	)
+
+	// Builds a query that returns a race with the user specified id value
+	query = getRaceQueries()[race]
+
+	// Passes the user input id into args
+	args = append(args, req.Id)
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	// retrieve first valuefrom array of races returned by scanRaces
+	races, err := r.scanRaces(rows)
+	if err != nil {
+		// If error occurs, return error
+		return nil, err
+	} else if len(races) == 0 {
+		// If no race found with the id, return ErrNoRows error
+		return nil, sql.ErrNoRows
+	} else {
+		// If id is valid and result is not empty, return the race
+		return races[0], nil
+	}
 }
 
 func (r *racesRepo) List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error) {
