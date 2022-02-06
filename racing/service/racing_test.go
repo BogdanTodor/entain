@@ -71,10 +71,6 @@ var (
 	}
 )
 
-// Investigate "google.golang.org/grpc/test/bufconn" for unit testing the gRPC service call for
-// filtering on visibility
-
-// Test order by functionality with different data types (int64, string and timestamp)
 func TestOrderRaces(t *testing.T) {
 	type inputArgs struct {
 		races   []*racing.Race
@@ -235,8 +231,8 @@ func TestAssignRaceStatus(t *testing.T) {
 			// AssignRaceStatus function and compare to expected statuses
 			actualStatuses := []string{}
 
-			for race := range actual {
-				actualStatuses = append(actualStatuses, actual[race].Status)
+			for raceIndex := range actual {
+				actualStatuses = append(actualStatuses, actual[raceIndex].Status)
 			}
 
 			assert.Equal(t, tt.expect, actualStatuses)

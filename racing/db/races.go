@@ -20,7 +20,7 @@ type RacesRepo interface {
 	// List will return a list of races.
 	List(filter *racing.ListRacesRequestFilter) ([]*racing.Race, error)
 
-	// GetRace will return a single race.
+	// Get will return a single race.
 	Get(req *racing.GetRaceRequest) (*racing.Race, error)
 }
 
@@ -32,6 +32,11 @@ type racesRepo struct {
 // NewRacesRepo creates a new races repository.
 func NewRacesRepo(db *sql.DB) RacesRepo {
 	return &racesRepo{db: db}
+}
+
+// Close attaches the provider and closes the connection
+func (r *racesRepo) Close() {
+	r.db.Close()
 }
 
 // Init prepares the race repository dummy data.
@@ -46,6 +51,7 @@ func (r *racesRepo) Init() error {
 	return err
 }
 
+// Gets and returns a single race based on the id provided in the request
 func (r *racesRepo) Get(req *racing.GetRaceRequest) (*racing.Race, error) {
 	var (
 		err   error
@@ -64,7 +70,7 @@ func (r *racesRepo) Get(req *racing.GetRaceRequest) (*racing.Race, error) {
 		return nil, err
 	}
 
-	// retrieve first valuefrom array of races returned by scanRaces
+	// retrieve first value from array of races returned by scanRaces
 	races, err := r.scanRaces(rows)
 	if err != nil {
 		// If error occurs, return error
@@ -107,12 +113,13 @@ func (r *racesRepo) applyFilter(query string, filter *racing.ListRacesRequestFil
 		return query, args
 	}
 
-	// Add visibility filter
+	// Filter for visible
 	if filter.Visible {
 		clauses = append(clauses, "visible = ?")
 		args = append(args, filter.Visible)
 	}
 
+	// Filter for meeting ids
 	if len(filter.MeetingIds) > 0 {
 		clauses = append(clauses, "meeting_id IN ("+strings.Repeat("?,", len(filter.MeetingIds)-1)+"?)")
 
