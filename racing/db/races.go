@@ -70,7 +70,7 @@ func (r *racesRepo) Get(req *racing.GetRaceRequest) (*racing.Race, error) {
 		return nil, err
 	}
 
-	// retrieve first value from array of races returned by scanRaces
+	// retrieve races returned by scanRaces
 	races, err := r.scanRaces(rows)
 	if err != nil {
 		// If error occurs, return error

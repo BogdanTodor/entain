@@ -10,16 +10,16 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Creating test entities
+// Create test entities
 var (
 
-	// Creating timestamps for sports events advertised_state_time field
+	// Create timestamps for the sports events advertised_start_time field
 	day_one   = timestamppb.New(time.Now().AddDate(0, 0, -2))
 	day_two   = timestamppb.New(time.Now().AddDate(0, 0, -1))
 	day_three = timestamppb.New(time.Now().AddDate(0, 0, 1))
 	day_four  = timestamppb.New(time.Now().AddDate(0, 0, 2))
 
-	// Creating four separate sports events to perform tests with
+	// Create four separate sports events to perform tests with
 	event_one = sports.SportsEvent{
 		Id:                  1,
 		Name:                "Hockey Event 1",
@@ -210,11 +210,9 @@ func TestAssignSportsEventsStatus(t *testing.T) {
 			// Create slice to store the statuses of the sports events returned by the
 			// AssignSportsEventsStatus function and compare to expected statuses
 			actualStatuses := []string{}
-
 			for sportsEventIndex := range actual {
 				actualStatuses = append(actualStatuses, actual[sportsEventIndex].Status)
 			}
-
 			assert.Equal(t, tt.expect, actualStatuses)
 			assert.Equal(t, tt.err, err)
 		})

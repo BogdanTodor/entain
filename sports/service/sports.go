@@ -58,7 +58,7 @@ func (s *sportsService) ListSportsEvents(ctx context.Context, in *sports.ListSpo
 		return nil, err
 	}
 
-	// Order the sports events by the user specified field (defaults to advertised time)
+	// Order the sports events by the user specified field (defaults to advertised start time)
 	sportsEvents, err = OrderSportsEvents(sportsEvents, in.OrderBy)
 	if err != nil {
 		return nil, err
@@ -99,10 +99,9 @@ func AssignSportsEventsStatus(sportsEvents []*sports.SportsEvent) ([]*sports.Spo
 		advertisedStart := sportEvent.GetAdvertisedStartTime().AsTime()
 
 		// Compare sports event start time to current time and assign status accordingly
+		sportEvent.Status = "OPEN"
 		if advertisedStart.Before(currentTime) {
 			sportEvent.Status = "CLOSED"
-		} else {
-			sportEvent.Status = "OPEN"
 		}
 	}
 	return sportsEvents, nil

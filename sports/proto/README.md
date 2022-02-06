@@ -8,7 +8,7 @@
 * **SportType**: The type of sport being played at the event (string)
 * **State**: The State where the sports event is located in (string)
 * **Visible**: Whether the sports event is visible (bool)
-* **AdvertisedStartTime**: The time the sports event is advertised to run (Timestamp)
+* **AdvertisedStartTime**: The time the sports event is advertised to start (Timestamp)
 * **Status**: Uses the AdvertisedStartTime to determine if the sports event is open or closed (string)
 
 #### RPCs
@@ -27,4 +27,4 @@
 * **ListSportsEventsRequestFilter**: Input into ListSportsEventsRequest that filters the sports events result. Can provide three optional inputs into the filter:
     1. A `bool` variable to filter on the sports event visibility
     2. A list of `string`s specifying the sport type to filter and view
-    3. A list of `string`s specifying the which states the events are in to filter and view
+    3. A list of `string`s specifying which states the events are in to filter and view

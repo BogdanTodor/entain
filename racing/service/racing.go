@@ -98,10 +98,9 @@ func AssignRaceStatus(races []*racing.Race) ([]*racing.Race, error) {
 		advertisedStart := race.GetAdvertisedStartTime().AsTime()
 
 		// Compare race start time to current time and assign status accordingly
+		race.Status = "OPEN"
 		if advertisedStart.Before(currentTime) {
 			race.Status = "CLOSED"
-		} else {
-			race.Status = "OPEN"
 		}
 	}
 	return races, nil

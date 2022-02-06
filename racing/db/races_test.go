@@ -12,15 +12,15 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Creating test entities
+// Create test entities
 var (
 
-	// Creating timestamps for Race advertised_state_time field
+	// Create timestamps for Race advertised_start_time field
 	day_one   = time.Now().AddDate(0, 0, -2)
 	day_two   = time.Now().AddDate(0, 0, -1)
 	day_three = time.Now().AddDate(0, 0, 1)
 
-	// Creating three separate races to perform tests with
+	// Create three separate races to perform tests with
 	race_two = racing.Race{
 		Id:                  2,
 		MeetingId:           2,
@@ -72,8 +72,7 @@ func TestGet(t *testing.T) {
 				FROM races
 				WHERE id = ?
 				LIMIT 1
-	
-				`
+			`
 	// Prepare mock result data and mock the query
 	rows := sqlmock.NewRows([]string{"id", "meeting_id", "name", "number", "visible", "advertised_start_time"}).
 		AddRow(race_two.Id, race_two.MeetingId, race_two.Name, race_two.Number, race_two.Visible, day_one)
@@ -118,6 +117,8 @@ func TestGetError(t *testing.T) {
 	// Query using invalid id
 	request := racing.GetRaceRequest{Id: race_four.Id}
 	response, err := repo.Get(&request)
+
+	// Verify results are as expected
 	assert.Empty(t, response)
 	assert.Error(t, err)
 }
@@ -142,7 +143,6 @@ func TestListAndFilterVisible(t *testing.T) {
 				FROM races
 				WHERE visible = ?
 			`
-
 	// Prepare mock result data and mock the query
 	rows := sqlmock.NewRows([]string{"id", "meeting_id", "name", "number", "visible", "advertised_start_time"}).
 		AddRow(race_two.Id, race_two.MeetingId, race_two.Name, race_two.Number, race_two.Visible, day_one).

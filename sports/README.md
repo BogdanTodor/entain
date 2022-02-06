@@ -1,4 +1,4 @@
-## Sport Service
+## Sports Service
 
 ### Instructions
 
@@ -16,4 +16,4 @@ To build and start the sport service execute the following command:
 go build && ./sports
 ```
 
-It should be noted that this will start the gRPC server on port 9000. If this port is already in use, you can configure a different port number in main.go.
+It should be noted that this will start the gRPC server on port 10000. If this port is already in use, you can configure a different port number in main.go.

@@ -154,7 +154,7 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
 
 To aid in proto generation following any changes, you can run `go generate ./...` from `api` and `racing` directories.
 
-Before you do so, please ensure you have the following installed. You can simply run the following command below in each of `api` and `racing` directories.
+Before you do so, please ensure you have the following installed. You can simply run the following command below in each of `api`, `racing` and `sports` directories.
 
 ```
 go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 google.golang.org/genproto/googleapis/api google.golang.org/grpc/cmd/protoc-gen-go-grpc google.golang.org/protobuf/cmd/protoc-gen-go

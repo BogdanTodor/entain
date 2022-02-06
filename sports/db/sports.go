@@ -64,7 +64,7 @@ func (r *sportsRepo) Get(req *sports.GetSportsEventRequest) (*sports.SportsEvent
 		return nil, err
 	}
 
-	// retrieve first value from array of sports events returned by scanSports
+	// retrieve sports events returned by scanSports
 	sportsEvents, err := r.scanSports(rows)
 	if err != nil {
 		// If error occurs, return error
@@ -73,7 +73,7 @@ func (r *sportsRepo) Get(req *sports.GetSportsEventRequest) (*sports.SportsEvent
 		// If no sport event found with the id, return sql ErrNoRows error
 		return nil, sql.ErrNoRows
 	} else {
-		// If id is valid and result is not empty, return the sport event
+		// If id is valid and result is not empty, return the first sports event
 		return sportsEvents[0], nil
 	}
 }

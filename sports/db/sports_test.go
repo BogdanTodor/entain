@@ -13,16 +13,16 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Creating test entities
+// Create test entities
 var (
 
-	// Creating timestamps for SportsEvent advertised_state_time field
+	// Create timestamps for SportsEvent advertised_start_time field
 	day_one   = time.Now().AddDate(0, 0, -2)
 	day_two   = time.Now().AddDate(0, 0, -1)
 	day_three = time.Now().AddDate(0, 0, 1)
 	day_four  = time.Now().AddDate(0, 0, 2)
 
-	// Creating four separate sports events to perform tests with
+	// Create four separate sports events to perform tests with
 	event_one = sports.SportsEvent{
 		Id:                  1,
 		Name:                "Hockey Event 1",
@@ -129,6 +129,8 @@ func TestGetError(t *testing.T) {
 	// Query using invalid id
 	request := sports.GetSportsEventRequest{Id: event_two.Id}
 	response, err := repo.Get(&request)
+
+	// Verify results are as expected
 	assert.Empty(t, response)
 	assert.Error(t, err)
 }
