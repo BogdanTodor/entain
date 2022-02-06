@@ -1,6 +1,58 @@
 ## Entain BE Technical Test
 
-This test has been designed to demonstrate your ability and understanding of technologies commonly used at Entain. 
+### Completed By Bogdan Todor
+
+### Example Commands
+1. Make a request for visible races...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-races" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"visible": true}
+}'
+
+```
+
+2. Make a request for races and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-races" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {}, "order_by" : "id"
+}'
+```
+
+3. Make a request for a single race by id...
+```bash
+curl "http://localhost:8000/v1/race/82"
+```
+
+4. Make a request for sports events and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-sportsEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {}, "order_by" : "id"
+}'
+```
+
+5. Make a request for sports events for Hockey and Baseball games, and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-sportsEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"sport":["Baseball","Hockey"]}, "order_by" : "id"
+}'
+```
+
+6. Make a request for a single sports event by id...
+```bash
+curl "http://localhost:8000/v1/sportsEvent/82"
+```
+
+## Test
+
+This test has been designed to demonstrate your ability and understanding of technologies commonly used at Entain.
 
 Please treat the services provided as if they would live in a real-world environment.
 
@@ -66,30 +118,6 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
      -d $'{
   "filter": {}
 }'
-```
-
-5. Make a request for visible races...
-```bash
-curl -X "POST" "http://localhost:8000/v1/list-races" \
-     -H 'Content-Type: application/json' \
-     -d $'{
-  "filter": {"visible": true}
-}'
-
-```
-
-6. Make a request for races and order by id...
-```bash
-curl -X "POST" "http://localhost:8000/v1/list-races" \
-     -H 'Content-Type: application/json' \
-     -d $'{
-  "filter": {}, "order_by" : "id"
-}'
-```
-
-6. Make a request for a single race by id...
-```bash
-curl "http://localhost:8000/v1/race/82"
 ```
 
 ### Changes/Updates Required
