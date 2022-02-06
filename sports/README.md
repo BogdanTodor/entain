@@ -1,4 +1,4 @@
-## Sport Service
+## Sports Service
 
 ### Instructions
 
