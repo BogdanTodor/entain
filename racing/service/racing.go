@@ -26,13 +26,15 @@ func NewRacingService(racesRepo db.RacesRepo) Racing {
 	return &racingService{racesRepo}
 }
 
-// GetRaceById returns a single race retrieved using a user specified id
+// Returns a single race retrieved using a user specified id
 func (s *racingService) GetRaceById(ctx context.Context, in *racing.GetRaceRequest) (*racing.GetRaceResponse, error) {
+	// Retrieve a single row from the database containing the race by id
 	race, err := s.racesRepo.Get(in)
 	if err != nil {
 		return nil, err
 	}
 
+	// Assign a status of either OPEN or CLOSED to the race
 	race, err = AssignRaceStatusSingle(race)
 	if err != nil {
 		return nil, err
@@ -41,17 +43,21 @@ func (s *racingService) GetRaceById(ctx context.Context, in *racing.GetRaceReque
 	return &racing.GetRaceResponse{Race: race}, nil
 }
 
+// Returns an array of races
 func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesRequest) (*racing.ListRacesResponse, error) {
+	// Retrieves all rows that meet the criteria of the filter from the database table
 	races, err := s.racesRepo.List(in.Filter)
 	if err != nil {
 		return nil, err
 	}
 
+	// Assign a status of either OPEN or CLOSED to each race
 	races, err = AssignRaceStatus(races)
 	if err != nil {
 		return nil, err
 	}
 
+	// Order the races by the user specified field (defaults to advertised time)
 	races, err = OrderRaces(races, in.OrderBy)
 	if err != nil {
 		return nil, err
@@ -60,13 +66,10 @@ func (s *racingService) ListRaces(ctx context.Context, in *racing.ListRacesReque
 	return &racing.ListRacesResponse{Races: races}, nil
 }
 
-// OrderRaces sorts the array of Races by the user defined order by field
+// Returns a sorted array of races based on the user defined order by field
 func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) {
-
-	// Sorts the races array using sort.Slice based on the orderedBy user input
-	// where in the case of no input or invalid inputs, advertised_start_time is
-	// the default case
-
+	// Sorts array by any of the below valid fields
+	// * defaults to advertised start time if not specified or invalid field is provided
 	sort.Slice(races, func(i, j int) bool {
 		switch orderedBy {
 		case "advertised_start_time":
@@ -86,32 +89,26 @@ func OrderRaces(races []*racing.Race, orderedBy string) ([]*racing.Race, error) 
 	return races, nil
 }
 
-// AssignRaceStatus compares the current time to the advertised start time of each race
-// and sets the status field to either OPEN or CLOSED
+// Assigns the status field to either OPEN or CLOSED and returns the resulting array
 func AssignRaceStatus(races []*racing.Race) ([]*racing.Race, error) {
-	// Get the current timestamp
 	currentTime := time.Now()
 
-	// Iterate over the races and compare the current time to the advertised start time
-	// to assign the status
 	for _, race := range races {
 		// Convert advertised start time to standard Go time
 		advertisedStart := race.GetAdvertisedStartTime().AsTime()
 
+		// Compare race start time to current time and assign status accordingly
+		race.Status = "OPEN"
 		if advertisedStart.Before(currentTime) {
 			race.Status = "CLOSED"
-		} else {
-			race.Status = "OPEN"
 		}
 	}
 	return races, nil
 }
 
-// AssignRaceStatusSingle is a wrapper function used to call AssignRaceStatus when
-// the result is a single element instead of an array of elements
+// Wrapper function to call AssignRaceStatus when the input and result are single element not arrays
 func AssignRaceStatusSingle(race *racing.Race) (*racing.Race, error) {
-	// make sure to test edge cases for this and justify decisions for doing it this way
-
+	// Store single race in array to pass to AssignRaceStatus
 	raceAsArray := []*racing.Race{race}
 
 	result, err := AssignRaceStatus(raceAsArray)

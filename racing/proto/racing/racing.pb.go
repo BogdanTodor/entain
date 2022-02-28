@@ -295,7 +295,7 @@ type Race struct {
 	Visible bool `protobuf:"varint,5,opt,name=visible,proto3" json:"visible,omitempty"`
 	// AdvertisedStartTime is the time the race is advertised to run.
 	AdvertisedStartTime *timestamp.Timestamp `protobuf:"bytes,6,opt,name=advertised_start_time,json=advertisedStartTime,proto3" json:"advertised_start_time,omitempty"`
-	// Status is states whether the race is OPEN or CLOSED
+	// Status states whether the race is OPEN or CLOSED
 	Status string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`
 }
 

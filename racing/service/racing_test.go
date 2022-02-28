@@ -9,17 +9,17 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-// Creating test entities
+// Create test entities
 var (
 
-	// Creating timestamps for Race advertised_state_time field
+	// Create timestamps for Race advertised_start_time field
 	day_one   = timestamppb.New(time.Now().AddDate(0, 0, -4))
 	day_two   = timestamppb.New(time.Now().AddDate(0, 0, -3))
 	day_three = timestamppb.New(time.Now().AddDate(0, 0, -2))
 	day_four  = timestamppb.New(time.Now().AddDate(0, 0, 1))
 	day_five  = timestamppb.New(time.Now().AddDate(0, 0, 2))
 
-	// Creating five separate races to perform tests with
+	// Create five separate races to perform tests with
 	race_two = racing.Race{
 		Id:                  2,
 		MeetingId:           2,
@@ -71,10 +71,6 @@ var (
 	}
 )
 
-// Investigate "google.golang.org/grpc/test/bufconn" for unit testing the gRPC service call for
-// filtering on visibility
-
-// Test order by functionality with different data types (int64, string and timestamp)
 func TestOrderRaces(t *testing.T) {
 	type inputArgs struct {
 		races   []*racing.Race
@@ -234,11 +230,9 @@ func TestAssignRaceStatus(t *testing.T) {
 			// Create slice to store the statuses of the race returned by the
 			// AssignRaceStatus function and compare to expected statuses
 			actualStatuses := []string{}
-
-			for race := range actual {
-				actualStatuses = append(actualStatuses, actual[race].Status)
+			for raceIndex := range actual {
+				actualStatuses = append(actualStatuses, actual[raceIndex].Status)
 			}
-
 			assert.Equal(t, tt.expect, actualStatuses)
 			assert.Equal(t, tt.err, err)
 		})

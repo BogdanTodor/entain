@@ -1,6 +1,58 @@
 ## Entain BE Technical Test
 
-This test has been designed to demonstrate your ability and understanding of technologies commonly used at Entain. 
+### Completed By Bogdan Todor
+
+### Example Commands
+1. Make a request for visible races...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-races" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"visible": true}
+}'
+
+```
+
+2. Make a request for races and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-races" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {}, "order_by" : "id"
+}'
+```
+
+3. Make a request for a single race by id...
+```bash
+curl "http://localhost:8000/v1/race/82"
+```
+
+4. Make a request for sports events and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-sportsEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {}, "order_by" : "id"
+}'
+```
+
+5. Make a request for sports events for Hockey and Baseball games, and order by id...
+```bash
+curl -X "POST" "http://localhost:8000/v1/list-sportsEvents" \
+     -H 'Content-Type: application/json' \
+     -d $'{
+  "filter": {"sport":["Baseball","Hockey"]}, "order_by" : "id"
+}'
+```
+
+6. Make a request for a single sports event by id...
+```bash
+curl "http://localhost:8000/v1/sportsEvent/82"
+```
+
+## Test
+
+This test has been designed to demonstrate your ability and understanding of technologies commonly used at Entain.
 
 Please treat the services provided as if they would live in a real-world environment.
 
@@ -68,30 +120,6 @@ curl -X "POST" "http://localhost:8000/v1/list-races" \
 }'
 ```
 
-5. Make a request for visible races...
-```bash
-curl -X "POST" "http://localhost:8000/v1/list-races" \
-     -H 'Content-Type: application/json' \
-     -d $'{
-  "filter": {"visible": true}
-}'
-
-```
-
-6. Make a request for races and order by id...
-```bash
-curl -X "POST" "http://localhost:8000/v1/list-races" \
-     -H 'Content-Type: application/json' \
-     -d $'{
-  "filter": {}, "order_by" : "id"
-}'
-```
-
-6. Make a request for a single race by id...
-```bash
-curl "http://localhost:8000/v1/race/82"
-```
-
 ### Changes/Updates Required
 
 - We'd like to see you push this repository up to **GitHub/Gitlab/Bitbucket** and lodge a **Pull/Merge Request for each** of the below tasks.
@@ -126,7 +154,7 @@ curl "http://localhost:8000/v1/race/82"
 
 To aid in proto generation following any changes, you can run `go generate ./...` from `api` and `racing` directories.
 
-Before you do so, please ensure you have the following installed. You can simply run the following command below in each of `api` and `racing` directories.
+Before you do so, please ensure you have the following installed. You can simply run the following command below in each of `api`, `racing` and `sports` directories.
 
 ```
 go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 google.golang.org/genproto/googleapis/api google.golang.org/grpc/cmd/protoc-gen-go-grpc google.golang.org/protobuf/cmd/protoc-gen-go

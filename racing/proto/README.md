@@ -12,8 +12,8 @@
 * **Status**: Uses the AdvertisedStartTime to determine if the race is open or closed (string)
 
 #### RPCs
-* `ListRaces(ListRacesRequest) ListRacesResponse`
-* `GetRaceById(GetRaceRequest) GetRaceResponse`
+* `ListRaces(ListRacesRequest) returns ListRacesResponse`
+* `GetRaceById(GetRaceRequest) returns GetRaceResponse`
 
 #### Requests
 * **ListRacesRequest**: Request which takes `ListRacesRequestFilter` and `order_by` as inputs 

@@ -3,6 +3,7 @@ module git.neds.sh/matty/entain/racing
 go 1.16
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/bufbuild/buf v0.37.0 // indirect
 	github.com/golang/protobuf v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.7.3

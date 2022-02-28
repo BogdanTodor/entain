@@ -1,0 +1,68 @@
+syntax = "proto3";
+package sports;
+
+option go_package = "/sports";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service Sports {
+  // ListSportsEvents will return a collection of all sports events.
+  rpc ListSportsEvents(ListSportsEventsRequest) returns (ListSportsEventsResponse) {
+    option (google.api.http) = { post: "/v1/list-sportsEvents", body: "*" };
+  }
+  // GetSportsEventById will return a single sports event based on the provided id
+  rpc GetSportsEventById(GetSportsEventRequest) returns (GetSportsEventResponse) {
+    option (google.api.http) = { get: "/v1/sportsEvent/{id=*}" };
+  }
+}
+
+/* Requests/Responses */
+
+// Request for ListSportsEvents call.
+message ListSportsEventsRequest {
+  ListSportsEventsRequestFilter filter = 1;
+  string order_by = 2;
+}
+
+// Request for GetSportsEventById call.
+message GetSportsEventRequest {
+  int64 id = 1;
+}
+
+// Response to ListSportsEvents call.
+message ListSportsEventsResponse {
+  repeated SportsEvent sportsEvents = 1;
+}
+
+// Reponse to GetSportsEventById call.
+message GetSportsEventResponse {
+    SportsEvent sportsEvent = 1;
+}
+
+// Filter for listing sports events.
+message ListSportsEventsRequestFilter {
+  bool visible = 1;
+  repeated string sport = 2;
+  repeated string state = 3;
+}
+
+/* Resources */
+
+// A sports event resource.
+message SportsEvent {
+  // ID represents a unique identifier for the sports event.
+  int64 id = 1;
+  // Name is the name given to the event.
+  string name = 2;
+  // SportType is the type of sport being played at the event.
+  string sport_type = 3;
+  // State is the State where the sports event is located in.
+  string state = 4;
+  // Visible represents whether or not the sports event is visible.
+  bool visible = 5;
+  // AdvertisedStartTime is the time the sports event is advertised to run.
+  google.protobuf.Timestamp advertised_start_time = 6;
+  // Status states whether the sports event is OPEN or CLOSED
+  string status = 7;
+}
